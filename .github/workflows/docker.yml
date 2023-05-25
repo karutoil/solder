@@ -31,9 +31,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           images: |
-            webhippie/solder
-            quay.io/webhippie/solder
-            ghcr.io/dockhippie/solder
+            karutoil/solder
           labels: |
             org.opencontainers.image.vendor=Webhippie
             maintainer=Thomas Boerger <thomas@webhippie.de>
@@ -65,10 +63,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            webhippie/solder:latest-amd64
-            quay.io/webhippie/solder:latest-amd64
-            ghcr.io/dockhippie/solder:latest-amd64
-
+            karutoil/solder:latest-amd64
+            
       - name: Build arm64
         id: arm64
         uses: docker/build-push-action@v3
@@ -80,9 +76,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            webhippie/solder:latest-arm64
-            quay.io/webhippie/solder:latest-arm64
-            ghcr.io/dockhippie/solder:latest-arm64
+            karutoil/solder:latest-arm64
 
       - name: Build arm
         id: arm
@@ -95,9 +89,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            webhippie/solder:latest-arm
-            quay.io/webhippie/solder:latest-arm
-            ghcr.io/dockhippie/solder:latest-arm
+            karutoil/solder:latest-arm
 
       - name: Hub manifest
         id: manifest1
@@ -109,30 +101,6 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           template: webhippie/solder:latest-ARCH
           target: webhippie/solder:latest
-          ignore_missing: true
-
-      - name: Quay manifest
-        id: manifest2
-        uses: actionhippie/manifest@v1
-        if: github.event_name != 'pull_request'
-        with:
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          template: quay.io/webhippie/solder:latest-ARCH
-          target: quay.io/webhippie/solder:latest
-          ignore_missing: true
-
-      - name: Ghcr manifest
-        id: manifest3
-        uses: actionhippie/manifest@v1
-        if: github.event_name != 'pull_request'
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          template: ghcr.io/dockhippie/solder:latest-ARCH
-          target: ghcr.io/dockhippie/solder:latest
           ignore_missing: true
 
 ...
